@@ -29,6 +29,10 @@ function addNote(e) {
         close.innerHTML = '<i class="fas fa-times"></i>';
         close.classList.add("close-note");
 
+        const detailP = document.createElement("p");
+        detailP.classList.add("detail-p");
+        detailP.innerText = input.value;
+
         //Append elements
         notesContainer.appendChild(noteDiv);
         noteDiv.appendChild(noteH3);
@@ -36,18 +40,32 @@ function addNote(e) {
         noteDiv.appendChild(noteButton);
         noteDiv.appendChild(close);
 
+        noteDiv.appendChild(detailP);
+
         noteH3.innerText = "Note " + NumNotes;
-        noteP.innerText = input.value;
+
+        let numPar = input.value;
+        numPar = numPar.split("");
+        let newPar = [];
+        if(numPar.length > 80) {
+            for(let i = 0 ; i < 80 ; i++) {
+                newPar.push(numPar[i]);
+            };
+            newPar = newPar.join("");
+            noteP.innerText = newPar + " ...";
+        } else {
+            noteP.innerText = input.value;
+        }
+
         noteButton.innerText = "View Detail";
 
-        saveLocal(input.value);
+        saveLocal(input.value,input.value);
 
         NumNotes++;
 
         input.value = "";
         
         noteButton.addEventListener("click",focusNote);
-
         close.addEventListener("click",closeNote);
     } else {
         alert("please fill in the input.")
@@ -56,7 +74,7 @@ function addNote(e) {
 }
 
 function focusNote(e) {
-    let target = e.target.parentNode.querySelector("p");
+    let target = e.target.parentNode.querySelector(".detail-p");
 
     const focusContainer = document.createElement("div");
     focusContainer.classList.add("focus-container");
@@ -76,6 +94,7 @@ function focusNote(e) {
 
 
     close.addEventListener("click",closeFocus);
+
 }
 
 function closeFocus(e) {
@@ -95,29 +114,45 @@ function closeNote(e) {
 }
 
 
-function saveLocal(item) {
+function saveLocal(item,detail) {
     let notes;
-
     if(localStorage.getItem("notes") === null) {
         notes = [];
     } else {
         notes = JSON.parse(localStorage.getItem("notes"));
     }
-
     notes.push(item);
     localStorage.setItem("notes",JSON.stringify(notes));
+
+
+    let localDetail;
+    if(localStorage.getItem("details") === null) {
+        localDetail = [];
+    } else {
+        localDetail = JSON.parse(localStorage.getItem("details"));
+    }
+    localDetail.push(detail);
+    localStorage.setItem("details",JSON.stringify(localDetail));
+
 }
 
 function setLocal() {
     let notes;
-
     if(localStorage.getItem("notes") === null) {
         notes = [];
     } else {
         notes = JSON.parse(localStorage.getItem("notes"));
     }
 
-    notes.forEach(function(item) {
+    let localDetail;
+    if(localStorage.getItem("details") === null) {
+        localDetail = [];
+    } else {
+        localDetail = JSON.parse(localStorage.getItem("details"));
+    }
+
+    for(let i = 0 ; i < localDetail.length ; i++) {
+
 
         const noteDiv = document.createElement("div");
         const noteH3 = document.createElement("h3");
@@ -129,8 +164,25 @@ function setLocal() {
         close.innerHTML = '<i class="fas fa-times"></i>';
         close.classList.add("close-note");
 
+        const detailP = document.createElement("p");
+        detailP.classList.add("detail-p");
+        detailP.innerText = localDetail[i];
+
         noteH3.innerText = "Note " + NumNotes;
-        noteP.innerText = item;
+
+        let numPar = notes[i];
+        numPar = numPar.split("");
+        let newPar = [];
+        if(numPar.length > 80) {
+            for(let i = 0 ; i < 80 ; i++) {
+                newPar.push(numPar[i]);
+            };
+            newPar = newPar.join("");
+            noteP.innerText = newPar + " ...";
+        } else {
+            noteP.innerText = notes[i];
+        }
+
         noteButton.innerText = "View Detail";
 
         //Append elements
@@ -140,11 +192,15 @@ function setLocal() {
         noteDiv.appendChild(noteButton);
         noteDiv.appendChild(close);
         
+        noteDiv.appendChild(detailP);
+
         NumNotes++;
 
         noteButton.addEventListener("click",focusNote);
         close.addEventListener("click",closeNote);
-    });
+
+
+    }
 }
 
 function deleteLocal(item) {
@@ -155,13 +211,31 @@ function deleteLocal(item) {
     } else {
         notes = JSON.parse(localStorage.getItem("notes"));
     }
+    
+    let localDetail;
+    if(localStorage.getItem("details") === null) {
+        localDetail = [];
+    } else {
+        localDetail = JSON.parse(localStorage.getItem("details"));
+    }
 
-    let deleteLocal = item.querySelector("p").innerHTML;
-    deleteLocal = deleteLocal.split('<br>');
+
+    let deleteLocal = item.querySelector(".detail-p").innerHTML;
+    deleteLocal = deleteLocal.split("<br>");
     deleteLocal = deleteLocal.join("\n");
-    console.log(deleteLocal);
-    if(notes.indexOf(deleteLocal) >= 0) {
+    if(notes.indexOf(deleteLocal) >= 0){
         notes.splice(notes.indexOf(deleteLocal),1);
         localStorage.setItem("notes",JSON.stringify(notes));
+    } 
+
+    let deleteDetailLocal = item.querySelector(".detail-p").innerHTML;
+    deleteDetailLocal = deleteDetailLocal.split("<br>");
+    deleteDetailLocal = deleteDetailLocal.join("\n");
+    if(localDetail.indexOf(deleteDetailLocal) >= 0){
+        localDetail.splice(localDetail.indexOf(deleteDetailLocal),1);
+        localStorage.setItem("details",JSON.stringify(localDetail));
     }
+
+    console.log(item.querySelector(".par").innerHTML);
+    console.log(item.querySelector(".detail-p").innerHTML);
 }

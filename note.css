@@ -98,6 +98,10 @@ form #submit:hover {
     margin: 0.5rem 0;
     overflow: hidden;
 }
+.detail-p {
+    position:absolute;
+    left:-100%;
+}
 .notes-container div .detail {
     font-size:1rem;
     font-weight:600;
@@ -175,6 +179,7 @@ form #submit:hover {
 .focus-div p {
     margin:0.3rem 0.1rem;
     font-size:1.1rem;
-    font-family: 'Fira Sans', sans-serif;
-    font-weight:600;
+    font-family:cursive;
+    font-weight:500;
+    line-height: 1.5rem;
 }
