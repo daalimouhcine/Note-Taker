@@ -183,3 +183,37 @@ form #submit:hover {
     font-weight:500;
     line-height: 1.5rem;
 }
+
+
+@media (max-width:750px) {
+        
+    form {
+        flex-direction:row;
+        flex-wrap: wrap;
+    }
+    form label {
+        font-size:1.1rem;
+        margin:0 0.5rem 0 0.2rem;
+    }
+    form #note {
+        width: 70vw;
+        margin:0 0.5rem 0 0.2rem;
+    }
+
+}
+
+@media (max-width:330px) {
+
+    form h2 {
+        min-height:7vh;
+        margin:1rem 0;
+        font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        font-size:1.2rem;
+    }
+
+    header h1 {
+        font-size:3rem;
+        font-family: 'Fira Sans', sans-serif;
+    }
+
+}
